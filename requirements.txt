@@ -1,2 +1,4 @@
 torch
 einops
+torchvision
+matplotlib
