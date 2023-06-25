@@ -1,6 +1,6 @@
 import torch.nn as nn
 from MLP import MLP
-from MultiHeadAttention import MultiHeadAttention
+from Models.MultiHeadAttention import MultiHeadAttention
 
 class TransformerBlock(nn.Module):
     # Input :  torch.Size([32, 197, 768])

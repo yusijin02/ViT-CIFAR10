@@ -1,6 +1,6 @@
 import torch.nn as nn
 
-from DropPath import DropPath
+from Models.DropPath import DropPath
 
 class MLP(nn.Module):
     # Input :  torch.Size([32, 197, 768])

@@ -12,4 +12,12 @@ parser.add_argument("--picture_size", type=int, default=224, help="picture size"
 parser.add_argument("--num_classes", type=int, default=10, help="number of classes")
 
 parser.add_argument("--eps", type=float, default=1e-6, help="epsilon, the infinitesimal numbers")
+parser.add_argument("--adam_beta_1", "-b1", type=float, default=0.9, help="beta_1 of Adam")
+parser.add_argument("--adam_beta_2", "-b2", type=float, default=0.999, help="beta_2 of Adam")
+parser.add_argument("--learning_rate", "-lr", type=float, default=0.1, help="initial learning rate")
+parser.add_argument("--steplr_step_size", type=int, default=20, help="step size of torch.optim.lr_scheduler.StepLR")
+parser.add_argument("--steplr_gamma", type=float, default=0.95, help="gamma of torch.optim.lr_scheduler.StepLR")
+parser.add_argument("--epoch", type=int, default=50, help="epoch")
+parser.add_argument("--max_norm", type=float, default=0.5, help="max norm of weights")
 
+parser.add_argument("--num_gpus", type=int, default=2, help="number of using GPUs")

@@ -4,7 +4,7 @@ import math
 import sys
 sys.path.append("..")
 from einops import rearrange
-from DropPath import DropPath
+from Models.DropPath import DropPath
 from flags import parser
 
 class MultiHeadAttention(nn.Module):

@@ -1,6 +1,6 @@
 import torch.nn as nn
 import copy
-from TransformerBlock import TransformerBlock
+from Models.TransformerBlock import TransformerBlock
 
 class TransformerEncoder(nn.Module):
     # Input :  torch.Size([32, 197, 768])
