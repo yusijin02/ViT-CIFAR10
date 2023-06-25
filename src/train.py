@@ -75,7 +75,7 @@ class Experiment:
                 num += len(x)
                 if _n >= 10000:
                     _n = 1
-                    print(f"    index: {index:.3}, loss: {loss.item():.6f}, accuracy: {(100 * correct / num):.3f}%")
+                    print(f"    index: {index:.3f}, loss: {loss.item():.6f}, accuracy: {(100 * correct / num):.3f}%")
                 index += 1
                 _n += len(x)
             
