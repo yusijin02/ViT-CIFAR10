@@ -2,6 +2,16 @@ import torch
 import torch.nn as nn
 
 class PatchEmbedding(nn.Module):
+    # Input :  torch.Size([32, 3, 224, 224])
+    #          32  = batch_size
+    #          3   = channels (RGB)
+    #          224 = height (H)
+    #          224 = weight (W)
+    # Output:  torch.Size([32, 196, 768])
+    #          32  = batch_size
+    #          196 = 14 * 14 = (224/16) * (224/16)
+    #          16  = patch_size
+    #          768 = hidden_size
     def __init__(self, FLAGS):
         super(PatchEmbedding, self).__init__()
         in_chans = FLAGS.in_chans
