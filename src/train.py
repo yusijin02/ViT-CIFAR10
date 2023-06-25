@@ -39,7 +39,7 @@ class Experiment:
         self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, 
                                                          step_size=FLAGS.steplr_step_size, gamma=FLAGS.steplr_gamma)
         self.epoch = FLAGS.epoch
-        self.criterion = nn.CrossEntropyLoss().to(FLAGS.device)
+        self.criterion = nn.CrossEntropyLoss().cuda()
         self.flags = FLAGS
         self.x = []
         self.y = []
@@ -87,7 +87,7 @@ class Experiment:
             if train_loss < self.best_loss:
                 self.best_loss  = train_loss
                 self.best_epoch = epoch
-                now = datetime()
+                now = datetime.now()
                 path_best = os.path.join(self.log_dir, "best.pth")
                 path_check = os.path.join(self.log_dir, f"checkpoints-{now.hour}-{now.minute}-{now.second}")
                 torch.save(self.model, path_best)
@@ -115,7 +115,7 @@ class Experiment:
 
 
     def _mkdir_logs_path(self):
-        now = datetime()
+        now = datetime.now()
         self.log_dir = os.path.join("./logs", f"{now.year}-{now.month}-{now.day}", f"weight-{now.hour}{now.minute}")
         if not os.path.exists(self.log_dir):
             os.makedirs(self.log_dir)
