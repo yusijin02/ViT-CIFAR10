@@ -14,8 +14,8 @@ class MLP(nn.Module):
         self.fc_1 = nn.Linear(FLAGS.hidden_size, FLAGS.mlp_hidden_size)
         self.fc_2 = nn.Linear(FLAGS.mlp_hidden_size, FLAGS.hidden_size)
         self.gelu = nn.GELU()
-        self.dropout = nn.Dropout(0.3)
-        self.drop_path = DropPath(0.2)
+        self.dropout = nn.Dropout(FLAGS.dropout_rate)
+        self.drop_path = DropPath(FLAGS.drop_prob)
     
     def forward(self, x):
         res = x
@@ -24,6 +24,7 @@ class MLP(nn.Module):
         x = self.gelu(x)
         x = self.dropout(x)
         x = self.fc_2(x)
+        # x = self.dropout(x)
         x = x + self.drop_path(x)
         x = self.layernorm(res + x)
         return x

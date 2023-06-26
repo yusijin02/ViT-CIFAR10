@@ -26,25 +26,20 @@ class MultiHeadAttention(nn.Module):
         self.drop_path = DropPath(FLAGS.drop_prob)
     
     def forward(self, x):
-        res = x
-        query = self.W_q(x).view(x.shape[0], -1, self.num_heads, self.d_q).transpose(1, 2)
-        key = self.W_k(x).view(x.shape[0], -1, self.num_heads, self.d_k).transpose(1, 2)
-        value = self.W_v(x).view(x.shape[0], -1, self.num_heads, self.d_v).transpose(1, 2)
-        # print(query.shape)  # torch.Size([32, 12, 197, 64])
-        # print(key.shape)    # torch.Size([32, 12, 197, 64])
-        # print(value.shape)  # torch.Size([32, 12, 197, 64])
-        attention = torch.matmul(query, key.transpose(-1, -2))
-        # print(attention.shape)  # torch.Size([32, 12, 197, 197])
-        attention = attention / math.sqrt(self.d_k)
-        attention = self.softmax(attention)
-        # print(attention.shape)  # torch.Size([32, 12, 197, 197])
-        context = torch.matmul(attention, value)
-        # print(context.shape)  # torch.Size([32, 12, 197, 64])
-        context = context.transpose(1, 2).reshape(x.shape[0], -1, self.hidden_size)
-        # print(context.shape)  # torch.Size([32, 197, 768])
-        context = context + self.drop_path(context)
+        res = x  # torch.Size([64, 17, 256])
+        # print(x.shape)
+        query = self.W_q(x).view(x.shape[0], -1, self.num_heads, self.d_q).transpose(1, 2)  # torch.Size([64, 12, 17, 64])
+        key = self.W_k(x).view(x.shape[0], -1, self.num_heads, self.d_k).transpose(1, 2)    # torch.Size([64, 12, 17, 64])
+        value = self.W_v(x).view(x.shape[0], -1, self.num_heads, self.d_v).transpose(1, 2)  # torch.Size([64, 12, 17, 64])
+        # print(key.shape)
+        attention = torch.matmul(query, key.transpose(-1, -2))  # torch.Size([64, 12, 17, 17])
+        attention = attention / math.sqrt(self.d_k)  # torch.Size([64, 12, 17, 17])
+        attention = self.softmax(attention)  # torch.Size([64, 12, 17, 17])
+        context = torch.matmul(attention, value)  # torch.Size([64, 12, 17, 64])
+        context = context.transpose(1, 2)  # torch.Size([64, 17, 12, 64])
+        context = context.reshape(x.shape[0], -1, self.hidden_size)  # torch.Size([64, 51, 256])
+        context = context + self.drop_path(context)  # torch.Size([64, 51, 256])
         x = self.layernorm(res + context)  
-        # print(x.shape)  # torch.Size([32, 197, 768])
         return x
     
 
