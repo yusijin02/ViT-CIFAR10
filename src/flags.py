@@ -6,8 +6,8 @@ parser.add_argument("--patch_size", type=int, default=16, help="patch size")
 parser.add_argument("--hidden_size", type=int, default=768, help="hidden size")
 parser.add_argument("--embedding_dim", type=int, default=64, help="embedding dim, d_k, d_q, d_v")
 parser.add_argument("--num_heads", type=int, default=12, help="number of heads")
-parser.add_argument("--drop_prob", type=float, default=0.2, help="drop path rate")
-parser.add_argument("--dropout_rate", type=float, default=0.3, help="dropout rate")
+parser.add_argument("--drop_prob", type=float, default=0.1, help="drop path rate")
+parser.add_argument("--dropout_rate", type=float, default=0.1, help="dropout rate")
 
 parser.add_argument("--num_layers", type=int, default=3, help="number of layers")
 parser.add_argument("--picture_size", type=int, default=32, help="picture size")
@@ -25,3 +25,4 @@ parser.add_argument("--max_norm", type=float, default=0.5, help="max norm of wei
 
 parser.add_argument("--check_epoch", type=int, default=20, help="save checkpoints each _ epochs")
 parser.add_argument("--num_gpus", type=int, default=1, help="number of using GPUs")
+parser.add_argument("--cuda_visable_device", type=str, default='0', help="cuda visable device")

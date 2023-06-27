@@ -155,6 +155,7 @@ class Experiment:
         plt.plot(self.x, self.y)
         plt.savefig(pic_path)
         
+        pic_path = os.path.join(self.log_dir, "acc.png")
         fig = plt.figure(figsize=(20, 8), dpi=80)
         plt.plot(self.x, self.acc_list)
         plt.savefig(pic_path)
