@@ -166,6 +166,7 @@ class Experiment:
             json.dump(vars(self.flags), f)
         
         self.model = torch.load(self.path_best).cuda()
+        self.vaild("Best")
         result_path = os.path.join(self.log_dir, "result.json")
         result = {
             "final": {
