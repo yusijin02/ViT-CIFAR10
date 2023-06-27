@@ -1,5 +1,6 @@
 cd src
-alias run='python main.py  \
+function run() {
+    python main.py \
         --epoch=$EPOCH \
         --batch_size=$BATCH_SIZE \
         --embedding_dim=$EMBEDDING_DIM \
@@ -10,7 +11,9 @@ alias run='python main.py  \
         --mlp_hidden_size=$MLP_HIDDEN_SIZE \
         --num_layer=$NUM_LAYER \
         --num_heads=$NUM_HEADS \
-        --steplr_step_size=$STEPLR_STEP_SIZE'
+        --steplr_step_size=$STEPLR_STEP_SIZE
+}
+
 
 EPOCH=250             # epoch数量
 BATCH_SIZE=256        # batch大小  # 64 acc=41
