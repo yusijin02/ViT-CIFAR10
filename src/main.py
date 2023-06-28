@@ -1,10 +1,17 @@
 from flags import parser
+from Models.ViT import VisionTransformer
+import os
+import torch
+from train import Experiment
 
 FLAGS = parser.parse_args()
+os.environ['CUDA_VISIBLE_DEVICES'] = FLAGS.cuda_visable_device
+FLAGS.device_ids = FLAGS.cuda_visable_device.split(",")
+for index in range(FLAGS.device_ids):
+    FLAGS.device_ids[index] = int(FLAGS.device_ids[index])
 
-from Models.ViT import VisionTransformer
-import torch
-
-model = VisionTransformer(FLAGS)
-x = torch.rand(64, 3, 32, 32)
-model(x)
+exp = Experiment(FLAGS)
+exp.train()
+exp.vaild()
+exp.draw()
+exp.log()

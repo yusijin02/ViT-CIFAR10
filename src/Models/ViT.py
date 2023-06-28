@@ -26,6 +26,7 @@ class VisionTransformer(nn.Module):
         self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=self.flags.num_layers)
 
         self.fc = nn.Linear(self.flags.hidden_size, self.flags.num_classes)
+        self.softmax = nn.Softmax(dim=-1)
 
     def forward(self, x):
                                       # input images   =====>   # [batch_size, in_chans, H, W]
@@ -40,7 +41,7 @@ class VisionTransformer(nn.Module):
         x = self.transformer_encoder(x)                         # [batch_size, num_patches+1, hidden_size]
         x = x[:, 0, :]                                          # [batch_size, hidden_size]
         x = self.fc(x)              # output classes   =====>   # [batch_size, num_classes]
-
-        return x
+        x = self.softmax(x)                                     # 灵异事件滚出中国
+        return x                                                # 🐱🐱保佑平安, acc上98
 
         

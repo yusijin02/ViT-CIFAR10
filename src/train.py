@@ -8,9 +8,8 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 from torchvision import transforms, datasets
 from torch.utils.data import DataLoader
-from Models.ViT import ViT
-from flags import parser
-FLAGS = parser.parse_args()
+from Models.ViT import VisionTransformer
+
 
 trans_train = transforms.Compose([
     transforms.RandomHorizontalFlip(),  # 随机水平翻转
@@ -33,8 +32,8 @@ class Experiment:
         self.train_loader = DataLoader(dataset=train_set, batch_size=FLAGS.batch_size, shuffle=True)
         self.vaild_loader = DataLoader(dataset=vaild_set, batch_size=FLAGS.batch_size, shuffle=False)
         
-        model = ViT(FLAGS)
-        model = nn.DataParallel(model, device_ids=range(FLAGS.num_gpus))
+        model = VisionTransformer(FLAGS)
+        model = nn.DataParallel(model, device_ids=FLAGS.device_ids)
         self.model = model.cuda()
         # self.optimizer = torch.optim.Adam(self.model.parameters(),
         #                                   betas=(FLAGS.adam_beta_1, FLAGS.adam_beta_2), eps=FLAGS.eps)
