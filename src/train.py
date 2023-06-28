@@ -55,6 +55,7 @@ class Experiment:
         self._mkdir_logs_path()
     
     def train(self):
+        self.model.train()
         for epoch in range(self.epoch):
             train_loss = 0.0
             index = 1
@@ -111,6 +112,7 @@ class Experiment:
 
 
     def vaild(self, type="Final"):
+        self.model.eval()
         num = 0
         correct = 0
         vaild_loss = 0.0
