@@ -40,7 +40,7 @@ class Experiment:
         # self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, 
         #                                                  step_size=FLAGS.steplr_step_size, gamma=FLAGS.steplr_gamma)
         self.optimizer = torch.optim.Adam(self.model.parameters())
-        self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=FLAGS.steplr_step_size)
+        # self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=FLAGS.steplr_step_size)
         self.epoch = FLAGS.epoch
         self.criterion = nn.CrossEntropyLoss().cuda()
         self.flags = FLAGS
@@ -86,7 +86,7 @@ class Experiment:
                 _n += len(x)
             
             end_time = time.time()
-            self.scheduler.step()
+            # self.scheduler.step()
             self.y.append(train_loss)
             self.x.append(epoch + 1)
             
