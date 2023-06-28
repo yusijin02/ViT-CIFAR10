@@ -2,7 +2,7 @@ import argparse
 parser = argparse.ArgumentParser()
 
 # input images
-parser.add_argument("--img_size", type=int, default=32, help="the size of input image")
+parser.add_argument("--img_size", type=int, default=72, help="the size of input image")
 parser.add_argument("--num_classes", type=int, default=10, help="the number of classes of the images")
 parser.add_argument("--img_chans", type=int, default=3, help="the number of channels of the images")
 # model setting
@@ -15,5 +15,6 @@ parser.add_argument("--num_layers", type=int, default=3, help="the number of tra
 parser.add_argument("--dropout_rate", type=float, default=0.1, help="the dropout value")
 parser.add_argument("--epoch", type=int, default=200, help="the number of epochs")
 parser.add_argument("--batch_size", type=int, default=128, help="the size of small batch")
+parser.add_argument("--check_epoch", type=int, default=50, help="save checkpoint after _ epochs")
 # enviroment setting
 parser.add_argument("--cuda_visable_device", type=str, default="0", help="string of cuda visable device. These GPUs will be used")

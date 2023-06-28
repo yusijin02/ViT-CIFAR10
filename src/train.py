@@ -11,21 +11,21 @@ from torch.utils.data import DataLoader
 from Models.ViT import VisionTransformer
 
 
-trans_train = transforms.Compose([
-    transforms.RandomHorizontalFlip(),  # 随机水平翻转
-    transforms.RandomGrayscale(),       # 随机灰度化处理
-    transforms.ToTensor(),              # 转为Tensor格式
-    transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                         std =[0.229, 0.224, 0.225])
-])
-trans_vaild = transforms.Compose([
-    transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                         std =[0.229, 0.224, 0.225])
-])
-
 class Experiment:
     def __init__(self, FLAGS) -> None:
+        trans_train = transforms.Compose([
+            transforms.RandomResizedCrop((FLAGS.img_size, FLAGS.img_size)),
+            transforms.RandomRotation(1),        # 随机旋转
+            transforms.RandomHorizontalFlip(),  # 随机水平翻转
+            transforms.RandomGrayscale(),       # 随机灰度化处理
+            transforms.ToTensor(),              # 转为Tensor格式
+            transforms.Normalize(mean=0, std=1)
+        ])
+        trans_vaild = transforms.Compose([
+            transforms.RandomResizedCrop((FLAGS.img_size, FLAGS.img_size)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=0, std=1)
+        ])
         self.root = "../data"
         train_set = datasets.CIFAR10(root=self.root, train=True,  download=True, transform=trans_train)
         vaild_set = datasets.CIFAR10(root=self.root, train=False, download=True, transform=trans_vaild)
