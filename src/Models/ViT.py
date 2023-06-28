@@ -4,36 +4,48 @@ import os
 from Models.PatchEmbedding import PatchEmbedding
 from Models.TransformerEncoder import TransformerEncoder
 
-class ViT(nn.Module):
+import torch
+import torch.nn as nn
+from torch.nn import Transformer
+
+class VisionTransformer(nn.Module):
     def __init__(self, FLAGS):
-        super(ViT, self).__init__()
-        self.patch_embedding = PatchEmbedding(FLAGS)  # [32, 3, 224, 224] ===> [32, 196, 768]
-        self.cls_token = nn.Parameter(torch.zeros(1, 1, FLAGS.hidden_size))  # [1, 1, 768]
-        num_patches = (int(FLAGS.picture_size / FLAGS.patch_size)) ** 2  # 196
-        self.pos_embed = nn.Parameter(torch.zeros(1, num_patches + 1, FLAGS.hidden_size))  # [1, 197, 768]
-        self.encoder = TransformerEncoder(FLAGS)  # [32, 197, 768] ===> [32, 197, 768]
-        self.fc = nn.Linear(FLAGS.hidden_size, FLAGS.num_classes)  # [32, 768] ===> [32, 10]
-        self.softmax = nn.Softmax(dim=-1)
-        
+        super(VisionTransformer, self).__init__()
+        self.flags = FLAGS
+        self.patch_embed = nn.Conv2d(in_channels=self.flags.img_chans, out_channels=self.flags.hidden_size, 
+                                     kernel_size=self.flags.patch_size, stride=self.flags.patch_size, bias=False)
+        num_patch = (self.flags.img_size // self.flags.patch_size) ** 2
+        num_cls_token = 1
+        self.cls_token = torch.rand(1, self.flags.hidden_size, num_patch)
+        self.num_tokens = num_cls_token + num_patch
+        self.position_enc = nn.Parameter(torch.zeros(1, self.num_tokens, self.flags.hidden_size))
+        self.dropout = nn.Dropout(self.flags.dropout_rate)
+
+        encoder_layer = nn.TransformerEncoderLayer(d_model=self.flags.hidden_size, nhead=self.flags.num_heads,
+                                                   dim_feedforward=self.flags.feedforward_dim)
+        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=self.flags.num_layers)
+
+        self.fc = nn.Linear(self.flags.hidden_size, self.flags.num_classes)
+
     def forward(self, x):
-        # print(x.shape)
-        x = self.patch_embedding(x)  # [32, 3, 224, 224] ===> [32, 196, 768]
-        # print(x.shape)
-        cls_tokens = self.cls_token.expand(x.shape[0], -1, -1)  # [32, 1, 768]
-        # print(cls_tokens.shape)
-        x = torch.cat((cls_tokens, x), dim=1)  # [32, 197, 768]
-        
-        # print(x.shape)
-        # print(self.pos_embed.shape)
-        x = x + self.pos_embed  # [32, 197, 768] + [1, 197, 768] = [32, 197, 768]
-        
-        # pos_embed = self.pos_embed.unsqueeze(0).repeat_interleave(x.shape[0], dim=0)
-        # x = torch.add(x, pos_embed)  # [32, 197, 768] + [1, 197, 768] = [32, 197, 768]
-        # pos_embed.requires_grad = False
-        
-        x = self.encoder(x)  # [32, 197, 768] ===> [32, 197, 768]
-        x = x[:, 0]  # [32, 197, 768] ===> [32, 768], 取每个197里的第0个
-        x = self.fc(x)  # [32, 768] ===> [32, 10]
-        x = self.softmax(x)  # [32, 10]
+                     # [batch_size, in_chans, H, W]
+        x = self.patch_embed(x)  # [batch_size, hidden_size, num_patches**0.5, num_patches**0.5]
+        x = x.flatten(2)  # [batch_size, hidden_size, num_patches]
+        # x = x.permute(2, 0, 1)
+        print(x.shape)
+        print(self.position_enc.shape)
+        x = x + self.position_enc
+        x = self.dropout(x)
+
+        x = self.transformer_encoder(x)
+        print(x.shape)
+        x = x.permute(1, 2, 0)
+        print(x.shape)
+        x = torch.mean(x, dim=1)
+        print(x.shape)
+        x = self.fc(x)
+        print(x.shape)
+
         return x
+
         
