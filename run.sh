@@ -29,32 +29,39 @@ NUM_HEADS=6                                       # 多头注意力的数量
 HIDDEN_SIZE=$((EMBEDDING_DIM * NUM_HEADS))        # Transformer块之间传递的数据维度, = EMDIM * NUM_HEADS
 # 6 * 16 ===> 60%
 # 6 * 48 ===> x_x
-# 6 * 24 ?
-# 8 * 16 ?
-# 8 * 24 ?
+# 6 * 24 ===> 42%
+# 8 * 16 ===> 53%
+# 8 * 24 ===> 32%
+# 6 * 12 ?
+# 4 * 16 ?
+# 4 * 12 ?
+# 4 * 24 ?
 ###################################################
 # 
 ###################################################
 
-# 6 * 24
-EMBEDDING_DIM=24
+# 6 * 12
+EMBEDDING_DIM=12
 NUM_HEADS=6
 HIDDEN_SIZE=$((EMBEDDING_DIM * NUM_HEADS))
 run
 
-# 8 * 16
+# 4 * 16
 EMBEDDING_DIM=16
-NUM_HEADS=8
+NUM_HEADS=4
 HIDDEN_SIZE=$((EMBEDDING_DIM * NUM_HEADS))
 run
 
-# 8 * 24
-# 6 * 24
+# 4 * 12
+EMBEDDING_DIM=12
+NUM_HEADS=4
+HIDDEN_SIZE=$((EMBEDDING_DIM * NUM_HEADS))
+run
+
+# 4 * 24
 EMBEDDING_DIM=24
-NUM_HEADS=8
+NUM_HEADS=4
 HIDDEN_SIZE=$((EMBEDDING_DIM * NUM_HEADS))
 run
-
-
 
 
