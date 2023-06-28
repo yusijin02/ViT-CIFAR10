@@ -7,7 +7,7 @@ function run() {
         --patch_size=$PATCH_SIZE \
         --feedforward_dim=$FEEDFORWARD_DIM \
         --num_layers=$NUM_LAYERS \
-        --num_heads=$NUM_HEADS \
+        --num_heads=$NUM_HEADS 
 }
 
 
@@ -29,8 +29,4 @@ NUM_HEADS=6           # 多头注意力的数量
 # 4 * 16 ?
 # 4 * 12 ?
 # 4 * 24 ?
-###################################################
-# 
-###################################################
-
 run
