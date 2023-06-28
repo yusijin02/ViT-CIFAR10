@@ -16,7 +16,7 @@ class VisionTransformer(nn.Module):
                                      kernel_size=self.flags.patch_size, stride=self.flags.patch_size, bias=False)
         num_patch = (self.flags.img_size // self.flags.patch_size) ** 2
         num_cls_token = 1
-        self.cls_token = nn.Parameter(torch.zeros(1, 1, FLAGS.hidden_size)) 
+        self.cls_token = nn.Parameter(torch.zeros(1, FLAGS.hidden_size, 1)) 
         self.num_tokens = num_cls_token + num_patch
         self.position_enc = nn.Parameter(torch.zeros(1, self.num_tokens, self.flags.hidden_size))
         self.dropout = nn.Dropout(self.flags.dropout_rate)
@@ -28,24 +28,18 @@ class VisionTransformer(nn.Module):
         self.fc = nn.Linear(self.flags.hidden_size, self.flags.num_classes)
 
     def forward(self, x):
-                     # [batch_size, in_chans, H, W]
-        x = self.patch_embed(x)  # [batch_size, hidden_size, num_patches**0.5, num_patches**0.5]
-        x = x.flatten(2)  # [batch_size, hidden_size, num_patches]
-        # x = x.permute(2, 0, 1)
-        
-        print(x.shape)
-        print(self.position_enc.shape)
-        x = x + self.position_enc
-        x = self.dropout(x)
-
-        x = self.transformer_encoder(x)
-        print(x.shape)
-        x = x.permute(1, 2, 0)
-        print(x.shape)
-        x = torch.mean(x, dim=1)
-        print(x.shape)
-        x = self.fc(x)
-        print(x.shape)
+                                      # input images   =====>   # [batch_size, in_chans, H, W]
+        x = self.patch_embed(x)                                 # [batch_size, hidden_size, num_patches**0.5, num_patches**0.5]
+        x = x.flatten(2)                                        # [batch_size, hidden_size, num_patches]
+        cls_tokens = self.cls_token.expand(x.shape[0], -1, -1)  # [batch_size, hidden_size, 1]
+        x = torch.cat((cls_tokens, x), dim=2)                   # [batch_size, hidden_size, num_patches+1]
+        x = x.permute(0, 2, 1)                                  # [batch_size, num_patches+1, hidden_size]
+                                 # self.position_enc   =====>   # [1, num_patches+1, hidden_size]
+        x = x + self.position_enc                               # [batch_size, num_patches+1, hidden_size]
+        x = self.dropout(x)                                     # [batch_size, num_patches+1, hidden_size]
+        x = self.transformer_encoder(x)                         # [batch_size, num_patches+1, hidden_size]
+        x = x[:, 0, :]                                          # [batch_size, hidden_size]
+        x = self.fc(x)              # output classes   =====>   # [batch_size, num_classes]
 
         return x
 
