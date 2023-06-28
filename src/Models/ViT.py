@@ -16,7 +16,7 @@ class VisionTransformer(nn.Module):
                                      kernel_size=self.flags.patch_size, stride=self.flags.patch_size, bias=False)
         num_patch = (self.flags.img_size // self.flags.patch_size) ** 2
         num_cls_token = 1
-        self.cls_token = torch.rand(1, self.flags.hidden_size, num_patch)
+        self.cls_token = nn.Parameter(torch.zeros(1, 1, FLAGS.hidden_size)) 
         self.num_tokens = num_cls_token + num_patch
         self.position_enc = nn.Parameter(torch.zeros(1, self.num_tokens, self.flags.hidden_size))
         self.dropout = nn.Dropout(self.flags.dropout_rate)
@@ -32,6 +32,7 @@ class VisionTransformer(nn.Module):
         x = self.patch_embed(x)  # [batch_size, hidden_size, num_patches**0.5, num_patches**0.5]
         x = x.flatten(2)  # [batch_size, hidden_size, num_patches]
         # x = x.permute(2, 0, 1)
+        
         print(x.shape)
         print(self.position_enc.shape)
         x = x + self.position_enc
