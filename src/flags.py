@@ -2,7 +2,7 @@ import argparse
 parser = argparse.ArgumentParser()
 
 # input images
-parser.add_argument("--img_size", type=int, default=72, help="the size of input image")
+parser.add_argument("--img_size", type=int, default=224, help="the size of input image")
 parser.add_argument("--num_classes", type=int, default=10, help="the number of classes of the images")
 parser.add_argument("--img_chans", type=int, default=3, help="the number of channels of the images")
 # model setting
