@@ -35,7 +35,9 @@ class ViT(nn.Module):
         
         x = self.encoder(x)  # [32, 197, 768] ===> [32, 197, 768]
         x = x[:, 0]  # [32, 197, 768] ===> [32, 768], 取每个197里的第0个
-        x = self.fc(x)  # [32, 768] ===> [32, 10]
+        x = self.fc1(x)  # [32, 768] ===> [32, 10]
+        x = self.relu(x)
+        x = self.fc2(x)
         x = self.softmax(x)  # [32, 10]
         return x
         
