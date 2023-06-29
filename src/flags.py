@@ -26,3 +26,5 @@ parser.add_argument("--max_norm", type=float, default=0.5, help="max norm of wei
 parser.add_argument("--check_epoch", type=int, default=20, help="save checkpoints each _ epochs")
 parser.add_argument("--num_gpus", type=int, default=1, help="number of using GPUs")
 parser.add_argument("--cuda_visable_device", type=str, default='0', help="cuda visable device")
+
+parser.add_argument("--cls_hidden", type=int, default=64, help="hidden size of classify mlp")

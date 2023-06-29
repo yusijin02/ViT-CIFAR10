@@ -12,7 +12,9 @@ class ViT(nn.Module):
         num_patches = (int(FLAGS.picture_size / FLAGS.patch_size)) ** 2  # 196
         self.pos_embed = nn.Parameter(torch.zeros(1, num_patches + 1, FLAGS.hidden_size))  # [1, 197, 768]
         self.encoder = TransformerEncoder(FLAGS)  # [32, 197, 768] ===> [32, 197, 768]
-        self.fc = nn.Linear(FLAGS.hidden_size, FLAGS.num_classes)  # [32, 768] ===> [32, 10]
+        self.fc1 = nn.Linear(FLAGS.hidden_size, FLAGS.cls_hidden)  # [32, 768] ===> [32, 10]
+        self.relu = nn.ReLU()
+        self.fc2 = nn.Linear(FLAGS.cls_hidden, FLAGS.num_classes)
         self.softmax = nn.Softmax(dim=-1)
         
     def forward(self, x):

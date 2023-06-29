@@ -33,35 +33,14 @@ HIDDEN_SIZE=$((EMBEDDING_DIM * NUM_HEADS))        # Transformer块之间传递�
 # 8 * 16 ===> 53%
 # 8 * 24 ===> 32%
 # 6 * 12 ===> 60%
-# 4 * 16 ?
-# 4 * 12 ?
-# 4 * 24 ?
+# 4 * 12 ===> 50%
 ###################################################
 # 
 ###################################################
 
 # 4 * 12
-EMBEDDING_DIM=12
-NUM_HEADS=4
+EMBEDDING_DIM=16
+NUM_HEADS=6
 HIDDEN_SIZE=$((EMBEDDING_DIM * NUM_HEADS))
 run
 
-# 4 * 24
-EMBEDDING_DIM=24
-NUM_HEADS=4
-HIDDEN_SIZE=$((EMBEDDING_DIM * NUM_HEADS))
-run
-
-NUM_LAYER=6
-EMBEDDING_DIM=12
-NUM_HEADS=4
-HIDDEN_SIZE=$((EMBEDDING_DIM * NUM_HEADS))
-run
-
-
-NUM_LAYER=6
-EMBEDDING_DIM=18
-MLP_HIDDEN_SIZE=256
-NUM_HEADS=4
-HIDDEN_SIZE=$((EMBEDDING_DIM * NUM_HEADS))
-run
